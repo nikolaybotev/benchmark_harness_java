@@ -18,7 +18,7 @@ public class BenchmarkBase {
 
     // Runs a short version of the benchmark. By default invokes [run] once.
     void warmup() {
-	run();
+        run();
     }
 
     // Exercices the benchmark. By default invokes [run] 10 times.
@@ -49,11 +49,15 @@ public class BenchmarkBase {
 	return 1000.0 * elapsed / iter;
     }
 
+    int warmupRuns = 0;
+
     // Measures the score for the benchmark and returns it.
     double measure() {
 	setup();
         // Warmup for at least 100ms. Discard result.
-	measureFor(new Runnable() { public void run() { BenchmarkBase.this.warmup(); } }, 100);
+	warmupRuns = 0;
+	measureFor(new Runnable() { public void run() { BenchmarkBase.this.warmup(); warmupRuns++; } }, 100000);
+	System.out.println("Warmup ran " + warmupRuns + " times.");
 	// Run the benchmark for at least 2000ms.
 	double result = measureFor(new Runnable() { public void run() { BenchmarkBase.this.exercise(); } }, 2000);
 	teardown();
