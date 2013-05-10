@@ -80,7 +80,8 @@ public class DeltaBlueExample {
 	}
 
 	Strength nextWeaker() {
-	    // TODO Extract into instance field?
+	    // Note: extracting the array into a static field 
+	    // does not improve performance
 	    return new Strength[] {WEAKEST, WEAK_DEFAULT, NORMAL, STRONG_DEFAULT,
 		    PREFERRED, STRONG_REFERRED}[value];
 	}
