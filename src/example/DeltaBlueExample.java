@@ -80,10 +80,9 @@ public class DeltaBlueExample {
 	}
 
 	Strength nextWeaker() {
-	    // Note: extracting the array into a static field 
+	    // Note: extracting the array into a static field
 	    // does not improve performance
-	    return new Strength[] {WEAKEST, WEAK_DEFAULT, NORMAL, STRONG_DEFAULT,
-		    PREFERRED, STRONG_REFERRED}[value];
+	    return STRENGTHS[value];
 	}
 
 	static boolean stronger(Strength s1, Strength s2) {
@@ -112,6 +111,9 @@ public class DeltaBlueExample {
     static final Strength NORMAL          = new Strength(4, "normal");
     static final Strength WEAK_DEFAULT    = new Strength(5, "weakDefault");
     static final Strength WEAKEST         = new Strength(6, "weakest");
+
+    private static final Strength[] STRENGTHS = new Strength[] {WEAKEST, WEAK_DEFAULT, NORMAL, STRONG_DEFAULT,
+	PREFERRED, STRONG_REFERRED};
 
 
     static abstract class Constraint {
