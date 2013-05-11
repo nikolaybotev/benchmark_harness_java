@@ -10,6 +10,9 @@ public class BenchmarkBase {
     // Empty constructor.
     public BenchmarkBase(String name) {
         this.name = name;
+        System.out.println(System.getProperty("java.vm.name")
+                + " " + System.getProperty("java.version")
+                + " " + System.getProperty("java.vm.version"));
     }
 
     // The benchmark code.
