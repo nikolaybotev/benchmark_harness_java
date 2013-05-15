@@ -4,6 +4,9 @@ import dart_core.Stopwatch;
 
 //Copyright 2011 Google Inc. All Rights Reserved.
 
+//Ported from Dart to Java by Nikolay Botev.
+//Dart Source: https://github.com/dart-lang/benchmark_harness/blob/eb5d303500602af669510c9a0a46034c50b566a2/lib/src/benchmark_base.dart
+
 public class BenchmarkBase {
     protected final String name;
 

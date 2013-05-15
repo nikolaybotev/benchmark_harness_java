@@ -21,6 +21,9 @@ package example;
 //Translated first from Smalltalk to JavaScript, and finally to
 //Dart by Google 2008-2010.
 
+//Ported from Dart to Java by Nikolay Botev.
+//Dart Source: https://github.com/dart-lang/benchmark_harness/blob/9f596cda6b8300e69b22cce4004e59f8028f59c5/example/DeltaBlue.dart
+
 /**
 * A Java implementation of the DeltaBlue constraint-solving
 * algorithm, translated from Dart, as described in:

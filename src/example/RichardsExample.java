@@ -29,6 +29,9 @@ package example;
 
 //Ported by the Dart team to Dart.
 
+//Ported from Dart to Java by Nikolay Botev.
+//Dart Source: https://github.com/dart-lang/benchmark_harness/blob/9f596cda6b8300e69b22cce4004e59f8028f59c5/example/Richards.dart
+
 //This is a Dart implementation of the Richards benchmark from:
 //
 // http://www.cl.cam.ac.uk/~mr10/Bench.html
