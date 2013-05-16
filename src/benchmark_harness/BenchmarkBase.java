@@ -23,12 +23,12 @@ public class BenchmarkBase {
     protected void run() { }
 
     // Runs a short version of the benchmark. By default invokes [run] once.
-    void warmup() {
+    public void warmup() {
         run();
     }
 
     // Exercices the benchmark. By default invokes [run] 10 times.
-    void exercise() {
+    public void exercise() {
         for (int i = 0; i < 10; i++) {
             run();
         }
