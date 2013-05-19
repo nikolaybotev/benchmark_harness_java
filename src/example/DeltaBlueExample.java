@@ -710,7 +710,7 @@ public class DeltaBlueExample {
             first.value = i;
             plan.execute();
             if (last.value != i) {
-                System.out.println("Chain test failed.\n{last.value)\n{i}");
+                System.out.printf("Chain test failed.\n%d\n%d\n", last.value, i);
             }
         }
     }
