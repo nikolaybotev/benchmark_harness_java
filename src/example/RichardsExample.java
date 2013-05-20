@@ -84,7 +84,7 @@ class Richards extends BenchmarkBase {
         if (scheduler.queueCount != EXPECTED_QUEUE_COUNT ||
                 scheduler.holdCount != EXPECTED_HOLD_COUNT) {
             System.out.printf("Error during execution: queueCount = %d"
-                    + ", holdCount = %d.", scheduler.queueCount, scheduler.holdCount);
+                    + ", holdCount = %d.\n", scheduler.queueCount, scheduler.holdCount);
         }
         if (EXPECTED_QUEUE_COUNT != scheduler.queueCount) {
             throw new RuntimeException("bad scheduler queue-count");

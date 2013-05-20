@@ -68,7 +68,7 @@ public class BenchmarkBase {
 
     public void report() {
         double score = measure();
-        System.out.printf("%s(RunTime): %f us.", name, score);
+        System.out.printf("%s(RunTime): %f us.\n", name, score);
     }
 
 }
