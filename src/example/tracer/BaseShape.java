@@ -10,7 +10,7 @@ package example.tracer;
 //Ported from Dart to Java by Nikolay Botev.
 //Dart Source: https://github.com/dart-lang/benchmark_harness/blob/8283bfab9d2427290c03955b7ced5aee4752ca5f/example/Tracer/dart/shapes.dart
 
-abstract class BaseShape {
+public abstract class BaseShape {
     final Vector position;
     final Materials material;
 
@@ -103,9 +103,5 @@ IntersectionInfo intersect(Ray ray){
 public String toString() {
  return String.format("Sphere [position=%s, radius=%f]", position, radius);
 }
-}
-
-public class Shapes {
-    // Dummy
 }
 

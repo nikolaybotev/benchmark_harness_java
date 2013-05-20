@@ -10,19 +10,6 @@ package example.tracer;
 //Ported from Dart to Java by Nikolay Botev.
 //Dart Source: https://github.com/dart-lang/benchmark_harness/blob/8283bfab9d2427290c03955b7ced5aee4752ca5f/example/Tracer/dart/engine.dart
 
-class IntersectionInfo {
-    boolean isHit = false;
-    int hitCount = 0;
-    BaseShape shape; Vector position, normal; Color color; double distance;
-
-    IntersectionInfo() {
-        this.color = new Color(0.0, 0.0, 0.0);
-    }
-
-    public String toString() { return String.format("Intersection [%s]", position); }
-}
-
-
 public class Engine {
     int canvasWidth;
     int canvasHeight;
