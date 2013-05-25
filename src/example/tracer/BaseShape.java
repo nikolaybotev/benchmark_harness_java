@@ -64,7 +64,7 @@ IntersectionInfo intersect(Ray ray) {
 }
 
 public String toString() {
- return String.format("Plane [%s, d=%f]", position, d);
+ return "Plane [" + position + ", d=" + d + "]";
 }
 }
 
@@ -101,7 +101,7 @@ IntersectionInfo intersect(Ray ray){
 }
 
 public String toString() {
- return String.format("Sphere [position=%s, radius=%f]", position, radius);
+ return "Sphere [position=" + position + ", radius=" + radius + "]";
 }
 }
 

@@ -91,7 +91,7 @@ public class Engine {
         best.distance = 2000;
 
         for(int i=0; i < scene.shapes.size(); i++){
-            BaseShape shape = scene.shapes.get(i);
+            BaseShape shape = (BaseShape)scene.shapes.get(i);
 
             if(shape != exclude){
                 IntersectionInfo info = shape.intersect(ray);
@@ -120,7 +120,7 @@ public class Engine {
         double shininess = Math.pow(10, info.shape.material.gloss + 1);
 
         for(int i = 0; i < scene.lights.size(); i++) {
-            Light light = scene.lights.get(i);
+            Light light = (Light) scene.lights.get(i);
 
             // Calc diffuse lighting
             Vector v = (light.position.operator_minus(info.position)).normalize();
@@ -188,6 +188,6 @@ public class Engine {
     }
 
     public String toString() {
-        return String.format("Engine [canvasWidth: %d, canvasHeight: %d]", canvasWidth, canvasHeight);
+        return "Engine [canvasWidth: " + canvasWidth + ", canvasHeight: " + canvasHeight + "]";
     }
 }

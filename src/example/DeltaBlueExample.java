@@ -458,7 +458,7 @@ public class DeltaBlueExample {
      **/
     static class Variable {
 
-        List<Constraint> constraints = new ArrayList<Constraint>();
+        List constraints = new ArrayList();
         Constraint determinedBy;
         int mark = 0;
         Strength walkStrength = WEAKEST;
@@ -527,11 +527,11 @@ public class DeltaBlueExample {
             Variable out = c.output();
             c.markUnsatisfied();
             c.removeFromGraph();
-            List<Constraint> unsatisfied = removePropagateFrom(out);
+            List unsatisfied = removePropagateFrom(out);
             Strength strength = REQUIRED;
             do {
                 for (int i = 0; i < unsatisfied.size(); i++) {
-                    Constraint u = unsatisfied.get(i);
+                    Constraint u = (Constraint) unsatisfied.get(i);
                     if (u.strength == strength) incrementalAdd(u);
                 }
                 strength = strength.nextWeaker();
@@ -560,12 +560,12 @@ public class DeltaBlueExample {
          * any constraint.
          * Assume: [sources] are all satisfied.
          */
-        Plan makePlan(List<Constraint> sources) {
+        Plan makePlan(List sources) {
             int mark = newMark();
             Plan plan = new Plan();
-            List<Constraint> todo = sources;
+            List todo = sources;
             while (todo.size() > 0) {
-                Constraint c = todo.remove(todo.size() - 1);//removeLast();
+                Constraint c = (DeltaBlueExample.Constraint)todo.remove(todo.size() - 1);//removeLast();
                 if (c.output().mark != mark && c.inputsKnown(mark)) {
                     plan.addConstraint(c);
                     c.output().mark = mark;
@@ -579,10 +579,10 @@ public class DeltaBlueExample {
          * Extract a plan for resatisfying starting from the output of the
          * given [constraints], usually a set of input constraints.
          */
-        Plan extractPlanFromConstraints(List<Constraint> constraints) {
-            List<Constraint> sources = new ArrayList<Constraint>();
+        Plan extractPlanFromConstraints(List constraints) {
+            List sources = new ArrayList();
             for (int i = 0; i < constraints.size(); i++) {
-                Constraint c = constraints.get(i);
+                Constraint c = (DeltaBlueExample.Constraint)constraints.get(i);
                 // if not in plan already and eligible for inclusion.
                 if (c.isInput() && c.isSatisfied()) sources.add(c);
             }
@@ -603,10 +603,10 @@ public class DeltaBlueExample {
          * constraint's output to one of its inputs.
          */
         boolean addPropagate(Constraint c, int mark) {
-            List<Constraint> todo = new ArrayList<Constraint>();
+            List todo = new ArrayList();
             todo.add(c);
             while (todo.size() > 0) {
-                Constraint d = todo.remove(todo.size() - 1);//removeLast();
+                Constraint d = (DeltaBlueExample.Constraint)todo.remove(todo.size() - 1);//removeLast();
                 if (d.output().mark == mark) {
                     incrementalRemove(c);
                     return false;
@@ -622,22 +622,22 @@ public class DeltaBlueExample {
          * downstream of the given constraint. Answer a collection of
          * unsatisfied constraints sorted in order of decreasing strength.
          */
-        List<Constraint> removePropagateFrom(Variable out) {
+        List removePropagateFrom(Variable out) {
             out.determinedBy = null;
             out.walkStrength = WEAKEST;
             out.stay = true;
-            List<Constraint> unsatisfied = new ArrayList<Constraint>();
-            List<Variable> todo = new ArrayList<Variable>();
+            List unsatisfied = new ArrayList();
+            List todo = new ArrayList();
             todo.add(out);
             while (todo.size() > 0) {
-                Variable v = todo.remove(todo.size() - 1);//removeLast();
+                Variable v = (DeltaBlueExample.Variable)todo.remove(todo.size() - 1);//removeLast();
                 for (int i = 0; i < v.constraints.size(); i++) {
-                    Constraint c = v.constraints.get(i);
+                    Constraint c = (DeltaBlueExample.Constraint)v.constraints.get(i);
                     if (!c.isSatisfied()) unsatisfied.add(c);
                 }
                 Constraint determining = v.determinedBy;
                 for (int i = 0; i < v.constraints.size(); i++) {
-                    Constraint next = v.constraints.get(i);
+                    Constraint next = (DeltaBlueExample.Constraint)v.constraints.get(i);
                     if (next != determining && next.isSatisfied()) {
                         next.recalculate();
                         todo.add(next.output());
@@ -647,10 +647,10 @@ public class DeltaBlueExample {
             return unsatisfied;
         }
 
-        void addConstraintsConsumingTo(Variable v, List<Constraint> coll) {
+        void addConstraintsConsumingTo(Variable v, List coll) {
             Constraint determining = v.determinedBy;
             for (int i = 0; i < v.constraints.size(); i++) {
-                Constraint c = v.constraints.get(i);
+                Constraint c = (DeltaBlueExample.Constraint)v.constraints.get(i);
                 if (c != determining && c.isSatisfied()) coll.add(c);
             }
         }
@@ -663,7 +663,7 @@ public class DeltaBlueExample {
      * one or more changing inputs.
      */
     static class Plan {
-        List<Constraint> list = new ArrayList<Constraint>();
+        List list = new ArrayList();
 
         void addConstraint(Constraint c) {
             list.add(c);
@@ -673,7 +673,7 @@ public class DeltaBlueExample {
 
         void execute() {
             for (int i = 0; i < list.size(); i++) {
-                list.get(i).execute();
+                ((Constraint)list.get(i)).execute();
             }
         }
     }
@@ -705,12 +705,12 @@ public class DeltaBlueExample {
         }
         new StayConstraint(last, STRONG_DEFAULT);
         EditConstraint edit = new EditConstraint(first, PREFERRED);
-        Plan plan = planner.extractPlanFromConstraints(Collections.<Constraint>singletonList(edit));
+        Plan plan = planner.extractPlanFromConstraints(Collections.singletonList(edit));
         for (int i = 0; i < 100; i++) {
             first.value = i;
             plan.execute();
             if (last.value != i) {
-                System.out.printf("Chain test failed.\n%d\n%d\n", last.value, i);
+                System.out.println("Chain test failed.\n" + last.value + "\n" + i);
             }
         }
     }
@@ -727,7 +727,7 @@ public class DeltaBlueExample {
         Variable offset = new Variable("offset", 1000);
         Variable src = null, dst = null;
 
-        List<Variable> dests = new ArrayList<Variable>();
+        List dests = new ArrayList();
         for (int i = 0; i < n; i++) {
             src = new Variable("src", i);
             dst = new Variable("dst", i);
@@ -741,17 +741,17 @@ public class DeltaBlueExample {
         if (src.value != 5) System.out.println("Projection 2 failed");
         change(scale, 5);
         for (int i = 0; i < n - 1; i++) {
-            if (dests.get(i).value != i * 5 + 1000) System.out.println("Projection 3 failed");
+            if (((Variable)dests.get(i)).value != i * 5 + 1000) System.out.println("Projection 3 failed");
         }
         change(offset, 2000);
         for (int i = 0; i < n - 1; i++) {
-            if (dests.get(i).value != i * 5 + 2000) System.out.println("Projection 4 failed");
+            if (((Variable)dests.get(i)).value != i * 5 + 2000) System.out.println("Projection 4 failed");
         }
     }
 
     static void change(Variable v, int newValue) {
         EditConstraint edit = new EditConstraint(v, PREFERRED);
-        Plan plan = planner.extractPlanFromConstraints(Collections.<Constraint>singletonList(edit));
+        Plan plan = planner.extractPlanFromConstraints(Collections.singletonList(edit));
         for (int i = 0; i < 10; i++) {
             v.value = newValue;
             plan.execute();

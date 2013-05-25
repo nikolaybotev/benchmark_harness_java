@@ -83,8 +83,9 @@ class Richards extends BenchmarkBase {
 
         if (scheduler.queueCount != EXPECTED_QUEUE_COUNT ||
                 scheduler.holdCount != EXPECTED_HOLD_COUNT) {
-            System.out.printf("Error during execution: queueCount = %d"
-                    + ", holdCount = %d.\n", scheduler.queueCount, scheduler.holdCount);
+            System.out.println("Error during execution: queueCount = "
+                    + scheduler.queueCount + ", holdCount = "
+                    + scheduler.holdCount + ".");
         }
         if (EXPECTED_QUEUE_COUNT != scheduler.queueCount) {
             throw new RuntimeException("bad scheduler queue-count");
@@ -324,7 +325,7 @@ class TaskControlBlock {
         return task;
     }
 
-    public String toString() { return String.format("tcb { %s@%d }", task, state); }
+    public String toString() { return "tcb { " + task + "@" + state + " }"; }
 }
 
 /**

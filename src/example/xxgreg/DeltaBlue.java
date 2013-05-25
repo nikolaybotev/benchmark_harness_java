@@ -143,7 +143,7 @@ class Strength {
 class Variable {
 
   public int value;               // my value; changed by constraints
-  public ArrayList<Constraint> constraints;      // normal constraints that reference me
+  public ArrayList constraints;      // normal constraints that reference me
   public Constraint determinedBy; // the constraint that currently determines
                                   // my value (or null if there isn't one)
   public int mark;                // used by the planner to mark constraints
@@ -156,7 +156,7 @@ class Variable {
 		   int nconstraints)
   {
     value= initialValue;
-    constraints= new ArrayList<Constraint>(nconstraints);
+    constraints= new ArrayList(nconstraints);
     determinedBy= null;
     mark= 0;
     this.walkStrength= walkStrength;
@@ -653,16 +653,16 @@ class ScaleConstraint extends BinaryConstraint {
 
 class Plan {
 
-  private ArrayList<Constraint> v;
+  private ArrayList v;
 
-  public Plan() { v= new ArrayList<Constraint>(); }
+  public Plan() { v= new ArrayList(); }
 
   public void addConstraint(Constraint c) { v.add(c); }
 
   public int size() { return v.size(); }
 
   public Constraint constraintAt(int index) {
-    return v.get(index); }
+    return (Constraint)v.get(index); }
 
   public void execute()
   {
@@ -729,11 +729,11 @@ class Planner {
     Variable out= c.output();
     c.markUnsatisfied();
     c.removeFromGraph();
-    ArrayList<Constraint> unsatisfied= removePropagateFrom(out);
+    ArrayList unsatisfied= removePropagateFrom(out);
     Strength strength= Strength.required;
     do {
       for (int i= 0; i < unsatisfied.size(); ++i) {
-	Constraint u= unsatisfied.get(i);
+	Constraint u = (Constraint)unsatisfied.get(i);
 	if (u.strength == strength)
 	  incrementalAdd(u);
       }
@@ -755,10 +755,10 @@ class Planner {
   //
   public boolean addPropagate(Constraint c, int mark)
   {
-    ArrayList<Constraint> todo= new ArrayList<Constraint>();
+    ArrayList todo= new ArrayList();
     todo.add(c);
     while (!todo.isEmpty()) {
-      Constraint d= todo.get(0);
+      Constraint d = (Constraint)todo.get(0);
       todo.remove(0);
       if (d.output().mark == mark) {
 	incrementalRemove(c);
@@ -774,10 +774,10 @@ class Planner {
   // The given variable has changed. Propagate new values downstream.
   public void propagateFrom(Variable v)
   {
-    ArrayList<Constraint> todo= new ArrayList<Constraint>();
+    ArrayList todo= new ArrayList();
     addConstraintsConsumingTo(v, todo);
     while (!todo.isEmpty()) {
-      Constraint c= todo.get(0);
+      Constraint c = (Constraint)todo.get(0);
       todo.remove(0);
       c.execute();
       addConstraintsConsumingTo(c.output(), todo);
@@ -788,25 +788,25 @@ class Planner {
   // downstream of the given constraint. Answer a collection of
   // unsatisfied constraints sorted in order of decreasing strength.
   //
-  protected ArrayList<Constraint> removePropagateFrom(Variable out)
+  protected ArrayList removePropagateFrom(Variable out)
   {
     out.determinedBy= null;
     out.walkStrength= Strength.weakest;
     out.stay= true;
-    ArrayList<Constraint> unsatisfied= new ArrayList<Constraint>();
-    ArrayList<Variable> todo= new ArrayList<Variable>();
+    ArrayList unsatisfied= new ArrayList();
+    ArrayList todo= new ArrayList();
     todo.add(out);
     while (!todo.isEmpty()) {
-      Variable v= todo.get(0);
+      Variable v = (Variable)todo.get(0);
       todo.remove(0);
       for (int i= 0; i < v.constraints.size(); ++i) {
-	Constraint c= v.constraints.get(i);
+	Constraint c = (Constraint)v.constraints.get(i);
 	if (!c.isSatisfied())
 	  unsatisfied.add(c);
       }
       Constraint determiningC= v.determinedBy;
       for (int i= 0; i < v.constraints.size(); ++i) {
-	Constraint nextC= v.constraints.get(i);
+	Constraint nextC = (Constraint)v.constraints.get(i);
 	if (nextC != determiningC && nextC.isSatisfied()) {
 	  nextC.recalculate();
 	  todo.add(nextC.output());
@@ -819,11 +819,11 @@ class Planner {
   // Extract a plan for resatisfaction starting from the outputs of
   // the given constraints, usually a set of input constraints.
   //
-  protected Plan extractPlanFromConstraints(ArrayList<Constraint> constraints)
+  protected Plan extractPlanFromConstraints(ArrayList constraints)
   {
-    ArrayList<Constraint> sources= new ArrayList<Constraint>();
+    ArrayList sources= new ArrayList();
     for (int i= 0; i < constraints.size(); ++i) {
-      Constraint c= constraints.get(i);
+      Constraint c = (Constraint)constraints.get(i);
       if (c.isInput() && c.isSatisfied())
 	sources.add(c);
     }
@@ -848,13 +848,13 @@ class Planner {
   // any constraint.
   // Assume: sources are all satisfied.
   //
-  protected Plan makePlan(ArrayList<Constraint> sources)
+  protected Plan makePlan(ArrayList sources)
   {
     int mark= newMark();
     Plan plan= new Plan();
-    ArrayList<Constraint> todo= sources;
+    ArrayList todo= sources;
     while (!todo.isEmpty()) {
-      Constraint c= todo.get(0);
+      Constraint c = (Constraint)todo.get(0);
       todo.remove(0);
       if (c.output().mark != mark && c.inputsKnown(mark)) {
 	// not in plan already and eligible for inclusion
@@ -866,12 +866,12 @@ class Planner {
     return plan;
   }
 
-  protected void addConstraintsConsumingTo(Variable v, ArrayList<Constraint> coll)
+  protected void addConstraintsConsumingTo(Variable v, ArrayList coll)
   {
     Constraint determiningC= v.determinedBy;
-    ArrayList<Constraint> cc= v.constraints;
+    ArrayList cc= v.constraints;
     for (int i= 0; i < cc.size(); ++i) {
-      Constraint c= cc.get(i);
+      Constraint c = (Constraint)cc.get(i);
       if (c != determiningC && c.isSatisfied())
 	coll.add(c);
     }
@@ -956,7 +956,7 @@ public class DeltaBlue extends BenchmarkBase {
 
     new StayConstraint(last, Strength.strongDefault);
     Constraint editC= new EditConstraint(first, Strength.preferred);
-    ArrayList<Constraint> editV= new ArrayList<Constraint>();
+    ArrayList editV= new ArrayList();
     editV.add(editC);
     Plan plan= planner.extractPlanFromConstraints(editV);
     for (int i= 0; i < 100; i++) {
@@ -982,7 +982,7 @@ public class DeltaBlue extends BenchmarkBase {
     Variable offset= new Variable("offset", 1000);
     Variable src= null, dst= null;
 
-    ArrayList<Variable> dests= new ArrayList<Variable>();
+    ArrayList dests= new ArrayList();
 
     for (int i= 0; i < n; ++i) {
       src= new Variable("src" + Integer.toString(i), i);
@@ -1000,13 +1000,13 @@ public class DeltaBlue extends BenchmarkBase {
 
     change(scale, 5);
     for (int i= 0; i < n - 1; ++i) {
-      if ((dests.get(i)).value != i * 5 + 1000)
+      if (((Variable)dests.get(i)).value != i * 5 + 1000)
 	error("Projection test 3 failed!");
     }
 
     change(offset, 2000);
     for (int i= 0; i < n - 1; ++i) {
-      if ((dests.get(i)).value != i * 5 + 2000)
+      if (((Variable)dests.get(i)).value != i * 5 + 2000)
 	error("Projection test 4 failed!");
     }
   }
@@ -1014,7 +1014,7 @@ public class DeltaBlue extends BenchmarkBase {
   private void change(Variable var, int newValue)
   {
     EditConstraint editC= new EditConstraint(var, Strength.preferred);
-    ArrayList<Constraint> editV= new ArrayList<Constraint>();
+    ArrayList editV= new ArrayList();
     editV.add(editC);
     Plan plan= planner.extractPlanFromConstraints(editV);
     for (int i= 0; i < 10; i++) {

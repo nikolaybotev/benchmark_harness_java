@@ -19,6 +19,6 @@ public class IntersectionInfo {
         this.color = new Color(0.0, 0.0, 0.0);
     }
 
-    public String toString() { return String.format("Intersection [%s]", position); }
+    public String toString() { return "Intersection [" + position + "]"; }
 }
 

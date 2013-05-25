@@ -66,6 +66,6 @@ public class Color {
         int g = (int) (this.green * 255);
         int b = (int) (this.blue * 255);
 
-        return String.format("rgb(%s,%s,%s)", r, g, b);
+        return "rgb(" + r + "," + g + "," + b + ")";
     }
 }

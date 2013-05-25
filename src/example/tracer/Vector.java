@@ -60,6 +60,6 @@ public class Vector {
     }
 
     public String toString() {
-      return String.format("Vector [%f, %f ,%f ]", x, y, z);
+      return "Vector [" + x + ", " + y + " ," + z + " ]";
     }
   }

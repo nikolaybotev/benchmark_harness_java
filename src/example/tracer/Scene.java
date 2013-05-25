@@ -22,7 +22,7 @@ class Ray {
         this.direction = direction;
     }
     public String toString() {
-        return String.format("Ray [%s, %s]", position, direction);
+        return ("Ray [" + position + ", " + direction + "]");
     }
 }
 
@@ -70,15 +70,15 @@ class Background {
 
 public class Scene {
     Camera camera;
-    List<BaseShape> shapes;
-    List<Light> lights;
+    List shapes;
+    List lights;
     Background background;
     Scene() {
         camera = new Camera(new Vector(0.0, 0.0, -0.5),
                 new Vector(0.0, 0.0, 1.0),
                 new Vector(0.0, 1.0, 0.0));
-        shapes = new ArrayList<BaseShape>();
-        lights = new ArrayList<Light>();
+        shapes = new ArrayList();
+        lights = new ArrayList();
         background = new Background(new Color(0.0, 0.0, 0.5), 0.2);
     }
 }
